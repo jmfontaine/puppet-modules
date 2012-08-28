@@ -1,0 +1,14 @@
+# File Managed by Puppet
+
+<VirtualHost *:<%= port %>>
+    ServerName <%= server_name %>
+    <% if "" != server_aliases -%>
+    ServerAlias <%= server_aliases %>
+    <% end -%>
+
+    AddDefaultCharset UTF-8
+    ErrorLog <%= log_dir %>/<%= server_name %>_error.log
+    CustomLog <%= log_dir %>/<%= server_name %>_access.log common
+
+    DocumentRoot "<%= document_root_path %>"
+</VirtualHost>

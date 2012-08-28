@@ -1,0 +1,36 @@
+# File Managed by Puppet
+
+<VirtualHost *:<%= port %>>
+    ServerName <%= server_name %>
+    <% if "" != server_aliases -%>
+    ServerAlias <%= server_aliases %>
+    <% end -%>
+
+    AddDefaultCharset UTF-8
+    ErrorLog <%= log_dir %>/<%= server_name %>_error.log
+    CustomLog <%= log_dir %>/<%= server_name %>_access.log common
+
+    DocumentRoot "<%= document_root_path %>"
+    <Directory   "<%= document_root_path %>">
+        ## Apache
+        Options -Indexes
+        AllowOverride None
+        Order allow,deny
+        Allow from all
+        Header unset ETag
+        FileETag None
+
+        ## mod_rewrite
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^(.*)$ app_dev.php [QSA,L]
+
+        ## mod_deflate
+        <IfModule mod_deflate.c>
+            AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css application/json
+            AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript
+            Header set Cache-control "Private"
+        </IfModule>
+    </Directory>
+
+</VirtualHost>
